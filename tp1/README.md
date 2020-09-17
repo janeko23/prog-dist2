@@ -1,6 +1,8 @@
 
 # Trabajo practico N°1 PROGRAMACION DISTRIBUIDAS II
-Este proyecto esta realizado con Go y node js
-- Aqui tiene el sitio oficial de go https://golang.org/ 
-y https://nodejs.org/es/
+Este proyecto esta realizado con  node js
 
+# Requisitos
+- Tener node js instalado:
+    - Aqui tiene el sitio oficial de nodejs  https://nodejs.org/es/
+- npm i
