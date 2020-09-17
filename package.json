@@ -1,0 +1,29 @@
+{
+  "name": "api-rest-tp1-PD2",
+  "version": "1.0.0",
+  "description": "TRABAJO PRACTICO N°1 DE PROGRAMACION DISTRIBUIDAS 2 UNDAV ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src"
+  },
+  "keywords": [],
+  "author": "janet muñoz",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-xml-bodyparser": "^0.3.0",
+    "fast-xml-parser": "^3.17.4",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.1",
+    "underscore": "^1.11.0",
+    "uuid": "^8.3.0",
+    "uuid-validate": "0.0.3",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
