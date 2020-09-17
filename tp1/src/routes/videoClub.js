@@ -29,18 +29,21 @@ router.post('/', (req, res) => {
     ...req.body
   };
   if(newData.rent){
+    var uuidClient = newData.rent.client_id[0]
+    var uuidObject = newData.rent.object_id[0]
+    var fecha = newData.rent.details[0].until[0];
     if (
-      validate(newData.rent.client_id[0]) &&
-      validate(newData.rent.object_id[0]) &&
-      newData.rent.details
+      validate(uuidClient) &&
+      validate(uuidObject) &&
+      newData.rent.details && isValidDate(fecha)
     ) {
       var newElement = {
         rent:{
-          client_id: newData.rent.client_id[0],
-          object_id: newData.rent.object_id[0],
+          client_id: uuidClient,
+          object_id: uuidObject,
           details: {
             status: newData.rent.details[0].status[0],
-            until: newData.rent.details[0].until[0],
+            until: fecha,
           },
         }
       };
@@ -54,19 +57,22 @@ router.post('/', (req, res) => {
       });
     }
   }
-  if (newData.return) {
+  else if(newData.return) {
+    var uuidClient = newData.return.client_id[0]
+    var uuidObject = newData.return.object_id[0]
+    var fecha = newData.return.details[0].until[0];
     if (
-      validate(newData.return.client_id[0]) &&
-      validate(newData.return.object_id[0]) &&
-      newData.return.details
+      validate(uuidClient) &&
+      validate(uuidObject) &&
+      newData.return.details && isValidDate(fecha)
     ) {
       var newElement = {
         return :{
-          client_id: newData.return.client_id[0],
-          object_id: newData.return.object_id[0],
+          client_id: uuidClient,
+          object_id: uuidObject,
           details: {
             status: newData.return.details[0].status[0],
-            until: newData.return.details[0].until[0],
+            until: fecha,
           },
         }
       };
@@ -81,19 +87,22 @@ router.post('/', (req, res) => {
     }
     //console.log(newData.return.client_id)
   }
-  if (newData.delivery_to_rent) {
+  else if(newData.delivery_to_rent) {
+    var uuidClient = newData.delivery_to_rent.client_id[0]
+    var uuidObject = newData.delivery_to_rent.object_id[0]
+    var fecha = newData.delivery_to_rent.details[0].until[0];
     if (
       validate(newData.delivery_to_rent.client_id[0]) &&
       validate(newData.delivery_to_rent.object_id[0]) &&
-      newData.delivery_to_rent.details
+      newData.delivery_to_rent.details && isValidDate(fecha)
     ) {
       var newElement = {
         delivery_to_rent: {
-          client_id: newData.delivery_to_rent.client_id[0],
-          object_id: newData.delivery_to_rent.object_id[0],
+          client_id: uuidClient,
+          object_id: uuidObject,
           details: {
             status: newData.delivery_to_rent.details[0].status[0],
-            until: newData.delivery_to_rent.details[0].until[0],
+            until: fecha,
           },
         }
       };
@@ -108,19 +117,22 @@ router.post('/', (req, res) => {
     }
     //console.log(newData.delivery_to_rent.client_id)
   }
-  if(newData.delivery_to_return){
+  else if(newData.delivery_to_return) {
+    var uuidClient = newData.delivery_to_return.client_id[0]
+    var uuidObject = newData.delivery_to_return.object_id[0]
+    var fecha = newData.delivery_to_return.details[0].until[0];
     if (
       validate(newData.delivery_to_return.client_id[0]) &&
       validate(newData.delivery_to_return.object_id[0]) &&
-      newData.delivery_to_return.details
+      newData.delivery_to_return.details && isValidDate(fecha)
     ) {
       var newElement = {
         delivery_to_return: {
-          client_id: newData.delivery_to_return.client_id[0],
-          object_id: newData.delivery_to_return.object_id[0],
+          client_id: uuidClient,
+          object_id: uuidObject,
           details: {
             status: newData.delivery_to_return.details[0].status[0],
-            until: newData.delivery_to_return.details[0].until[0],
+            until: fecha,
           },
         }
       };
@@ -135,6 +147,9 @@ router.post('/', (req, res) => {
     }
     //console.log(newData.delivery_to_return.client_id)
   }
+  else{
+    res.send("Error type data");
+  }
   
 });
 // actualizar
@@ -143,31 +158,39 @@ router.put("/:type", (req, res) => {
   const data = {
     ...req.body
   }
-  if (id && title && director && year && rating) {
-    _.each(data, (movie, i) => {
-      if (movie.id === id) {
-        movie.title = title;
-        movie.director = director;
-        movie.year = year;
-        movie.rating = rating;
-      }
-    });
-    res.json(data);
-  } else {
-    res.status(500).json({ error: "There was an error." });
-  }
+  
 });
-
-router.delete("/:id", (req, res) => {
-  const { id } = req.params;
-  if (id) {
-    _.each(data, (movie, i) => {
-      if (movie.id == id) {
-        data.splice(i, 1);
-      }
-    });
-    res.json(data);
-  }
+// eliminar
+router.delete("/:type", (req, res) => {
+  const { type } = req.params;
+  
 });
 
 module.exports = router;
+function isValidDate(dateString) {
+
+    var datePattern = /^(19[5-9][0-9]|20[0-4][0-9]|2050)[/](0?[1-9]|1[0-2])[/](0?[1-9]|[12][0-9]|3[01])$/;
+
+    var matchArray = dateString.match(datePattern);
+
+    if (matchArray == null) {
+        return false;
+    }
+    var cleanDateString = dateString.replace(/\D/g, '');
+
+    var year = parseInt(cleanDateString.substr(0, 4));
+    var month = parseInt(cleanDateString.substr(4, 2));
+    var day = parseInt(cleanDateString.substr(6, 2));
+
+
+    var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) {
+        daysInMonth[1] = 29;
+    }
+
+    if (month < 1 || month > 12 || day < 1 || day > daysInMonth[month - 1]) {
+        return false;
+    }
+    return true;
+}
