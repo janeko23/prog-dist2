@@ -1,0 +1,20 @@
+instruciones de instalacion
+
+npm init -y
+https://github.com/paradigmadigital/ChaiHttp-sample 
+https://www.paradigmadigital.com/dev/testeo-api-rest-mocha-chai-http/
+https://dev.to/demetrakopetros/unit-testing-node-js-apis-c2k
+read://https_medium.com/?url=https%3A%2F%2Fmedium.com%2F%40xoor%2Fbuilding-a-node-js-rest-api-8-unit-testing-822c32a587df
+https://rapidapi.com/blog/nodejs-express-rest-api-example/?utm_source=google&utm_medium=cpc&utm_campaign=DSA&gclid=CjwKCAjwkoz7BRBPEiwAeKw3q8y3EWPw464YFgif-0Ke7p1TT_RiCIrwTTZ9fZlXSoPnk8UtiW5XdBoCMPkQAvD_BwE
+
+Dependencias
+express: frame
+morgan: morgan es para ver en consola las peticiones client
+
+npm i express morgan
+
+npm i -g typescript  
+tsc --init
+
+npm i nodemon -D 
+npm i @types/express -D
