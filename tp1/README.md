@@ -6,10 +6,10 @@ Este proyecto esta realizado con  node js
 - Tener node js instalado:
     - Aqui tiene el sitio oficial de nodejs  https://nodejs.org/es/
 - postman
-- npm i
+- En la carpeta tp1 corre el siguiente comando "npm i"
 
 # Como correr el programa
-- npm run dev
+- npm start
 
 # Como realizar pruebas de uso
 Para saber que nodejs esta correctamente instalado

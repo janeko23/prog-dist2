@@ -1,32 +1,72 @@
 const { Router } = require("express");
 const router = new Router();
 const _ = require("underscore");
+const fs = require('fs');
 const validate = require('uuid-validate');
-const datos = require("../datos.json");
+const json_items = fs.readFileSync('src/datos.json', 'utf-8');
+let items = JSON.parse(json_items);
+
+//const datos = require("src/datos");
+
 // get all
-router.get("/", (req, res) => {
-  res.json(datos);
+router.get("/", (request, response) => {
+  response.json(items[0]);
 });
-// get for type
-router.get("/:type", (req, res) => {
-  const { type } = req.params;
-  if (type == "rent") {
-    res.json(datos[0]);
-  } else if (type == "return") {
-    res.json(datos[1]);
-  } else if (type == "delivery_to_rent") {
-    res.json(datos[2]);
-  } else if (type == "delivery_to_return") {
-    res.json(datos[3]);
-  } else{
-    res.send("Type error")
+// get specific type
+router.get("/:type",(request, response) => {
+  var { type } = request.params;
+  switch (type) {
+    case "rent":
+      response.json(items[0][0]);
+      break;
+    case "return":
+      response.json(items[1][0]);
+      break;
+    case "delivery_to_rent":
+      response.json(items[2][0]);
+      break;
+     case "delivery_to_return":
+      response.json(items[3][0]);
+      break;
+    default:
+      response.send("Type error. ONLY VALID: RENT,  DELIVERY_TO_RENT / RETURN / DELIVERY_TO_RETURN  ")
+      break;
   }  
 });
+router.get("/:type/:object_id", (request, response) => {
+  var {
+    type,
+    object_id
+  } = request.params;
+  console.log(request.params)
+  switch (type) {
+    case "rent":
+      var list = items[0][0].rent
+      searchItemByObjet_id(list, object_id)
+      response.send(checkList(list))
+      break;
+    case "return":
+      var list = items[1][0].return
+      response.send(checkList(list))
+      break;
+    case "delivery_to_rent":
+      var list = items[2][0].delivery_to_rent
+      response.send(checkList(list))
+      break;
+    case "delivery_to_return":
+      var list = items[3][0].delivery_to_return
+      response.send(checkList(list))
+      break;
+    default:
+      response.send("Invalid param.")
+      break;
+  }
+});
 // crear cada tipo
-router.post('/', (req, res) => {
+router.post('/', (request, response) => {
 // rent,  DELIVERY_TO_RENT / RETURN / DELIVERY_TO_RETURN   
   const newData = {
-    ...req.body
+    ...request.body
   };
   if(newData.rent){
     var uuidClient = newData.rent.client_id[0]
@@ -49,10 +89,10 @@ router.post('/', (req, res) => {
       };
       console.log(newElement);
       datos[0].push(newElement);
-      res.json(datos[0]);
+      response.json(datos[0]);
 
     } else {
-      res.status(500).json({
+      response.status(500).json({
         error: "There was an error.",
       });
     }
@@ -78,10 +118,10 @@ router.post('/', (req, res) => {
       };
       console.log(newElement);
       datos[1].push(newElement);
-      res.json(datos[1]);
+      response.json(datos[1]);
 
     } else {
-      res.status(500).json({
+      response.status(500).json({
         error: "There was an error.",
       });
     }
@@ -108,10 +148,10 @@ router.post('/', (req, res) => {
       };
       console.log(newElement);
       datos[2].push(newElement);
-      res.json(datos[2]);
+      response.json(datos[2]);
 
     } else {
-      res.status(500).json({
+      response.status(500).json({
         error: "There was an error.",
       });
     }
@@ -138,31 +178,35 @@ router.post('/', (req, res) => {
       };
       console.log(newElement);
       datos[3].push(newElement);
-      res.json(datos[3]);
+      response.json(datos[3]);
 
     } else {
-      res.status(500).json({
+      response.status(500).json({
         error: "There was an error.",
       });
     }
     //console.log(newData.delivery_to_return.client_id)
   }
   else{
-    res.send("Error type data");
+    response.send("Error type data");
   }
   
 });
 // actualizar
-router.put("/:type", (req, res) => {
-  const { type } = req.params;
+router.put("/:type", (request, response) => {
+  const {
+    type
+  } = request.params;
   const data = {
-    ...req.body
+    ...request.body
   }
   
 });
 // eliminar
-router.delete("/:type", (req, res) => {
-  const { type } = req.params;
+router.delete("/:type", (request, response) => {
+  const {
+    type
+  } = request.params;
   
 });
 
@@ -193,4 +237,18 @@ function isValidDate(dateString) {
         return false;
     }
     return true;
+}
+function checkList(list){
+    if (list.length == 0) {
+      return "Don't have items"
+    }
+    return list
+}
+function searchItemByObjet_id(list, object_id){
+  list.forEach(element => {
+   var uuid1 = element.object_id.toString()
+   console.log(object_id)
+
+  //console.log(element.object_id)
+  });
 }
