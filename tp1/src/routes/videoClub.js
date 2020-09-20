@@ -29,7 +29,7 @@ router.get("/:type",(request, response) => {
       response.json(items[3][0]);
       break;
     default:
-      response.send("Type error. ONLY VALID: RENT,  DELIVERY_TO_RENT / RETURN / DELIVERY_TO_RETURN  ")
+      response.status(404).json("Type error. ONLY VALID: RENT,  DELIVERY_TO_RENT / RETURN / DELIVERY_TO_RETURN")
       break;
   }  
 });
