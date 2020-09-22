@@ -38,27 +38,44 @@ router.get("/:type/:object_id", (request, response) => {
     type,
     object_id
   } = request.params;
-  console.log(request.params)
+ // console.log(request.params)
   switch (type) {
     case "rent":
       var list = items[0][0].rent
-      searchItemByObjet_id(list, object_id)
-      response.send(checkList(list))
+      if (searchItemByObjet_id(list, object_id) == null) {
+        response.status(404).json("You don't have that element")
+      } else {
+        response.json(searchItemByObjet_id(list, object_id))
+      }
       break;
     case "return":
       var list = items[1][0].return
-      response.send(checkList(list))
+
+      if (searchItemByObjet_id(list, object_id) == null) {
+        response.status(404).json("You don't have that element")
+      } else {
+        response.json(searchItemByObjet_id(list, object_id))
+      } 
       break;
     case "delivery_to_rent":
       var list = items[2][0].delivery_to_rent
-      response.send(checkList(list))
+      if (searchItemByObjet_id(list, object_id) == null) {
+        response.status(404).json("You don't have that element")
+      } else {
+        response.json(searchItemByObjet_id(list, object_id))
+      } 
       break;
     case "delivery_to_return":
       var list = items[3][0].delivery_to_return
-      response.send(checkList(list))
+  
+      if (searchItemByObjet_id(list, object_id) == null) {
+        response.status(404).json("You don't have that element")
+      } else {
+        response.json(searchItemByObjet_id(list, object_id))
+      } 
       break;
     default:
-      response.send("Invalid param.")
+      response.status(404).json("Invalid param.")
       break;
   }
 });
@@ -69,126 +86,117 @@ router.post('/', (request, response) => {
     ...request.body
   };
   if(newData.rent){
-    var uuidClient = newData.rent.client_id[0]
-    var uuidObject = newData.rent.object_id[0]
-    var fecha = newData.rent.details[0].until[0];
-    if (
-      validate(uuidClient) &&
-      validate(uuidObject) &&
-      newData.rent.details && isValidDate(fecha)
-    ) {
-      var newElement = {
-        rent:{
-          client_id: uuidClient,
-          object_id: uuidObject,
-          details: {
-            status: newData.rent.details[0].status[0],
-            until: fecha,
-          },
-        }
-      };
-      console.log(newElement);
-      datos[0].push(newElement);
-      response.json(datos[0]);
+      //var list = items[0][0].rent.push(newData.rent);
+      var uuidClient = newData.rent.client_id[0]
+      var uuidObject = newData.rent.object_id[0]
+      var fecha = newData.rent.details[0].until[0];
+      if (
+        validate(uuidClient) &&
+        validate(uuidObject) &&
+        newData.rent.details && isValidDate(fecha)
+      ) {
+        var newElement =  {
+            client_id: uuidClient,
+            object_id: uuidObject,
+            details: {
+              status: newData.rent.details[0].status[0],
+              until: fecha,
+            }
+        };
 
-    } else {
-      response.status(500).json({
-        error: "There was an error.",
-      });
-    }
-  }
-  else if(newData.return) {
-    var uuidClient = newData.return.client_id[0]
-    var uuidObject = newData.return.object_id[0]
-    var fecha = newData.return.details[0].until[0];
-    if (
-      validate(uuidClient) &&
-      validate(uuidObject) &&
-      newData.return.details && isValidDate(fecha)
-    ) {
-      var newElement = {
-        return :{
-          client_id: uuidClient,
-          object_id: uuidObject,
-          details: {
-            status: newData.return.details[0].status[0],
-            until: fecha,
-          },
-        }
-      };
-      console.log(newElement);
-      datos[1].push(newElement);
-      response.json(datos[1]);
+        items[0][0].rent.push(newElement);
+        response.json(items[0][0].rent);
 
-    } else {
-      response.status(500).json({
-        error: "There was an error.",
-      });
-    }
-    //console.log(newData.return.client_id)
+      } else {
+        response.status(500).json({
+          error: "There was an error.",
+        });
+      }
   }
-  else if(newData.delivery_to_rent) {
+  else if (newData.return) {
+      //var list = items[0][0].rent.push(newData.rent);
+      var uuidClient = newData.return.client_id[0]
+      var uuidObject = newData.return.object_id[0]
+      var fecha = newData.return.details[0].until[0];
+      if (
+        validate(uuidClient) &&
+        validate(uuidObject) &&
+        newData.return.details && isValidDate(fecha)
+      ) {
+        var newElement =  {
+            client_id: uuidClient,
+            object_id: uuidObject,
+            details: {
+              status: newData.return.details[0].status[0],
+              until: fecha,
+            },
+        };
+
+        items[1][0].return.push(newElement);
+        response.json(items[1][0].return);
+
+      } else {
+        response.status(500).json({
+          error: "There was an error.",
+        });
+      }
+  }
+  else if (newData.delivery_to_rent){ 
     var uuidClient = newData.delivery_to_rent.client_id[0]
     var uuidObject = newData.delivery_to_rent.object_id[0]
     var fecha = newData.delivery_to_rent.details[0].until[0];
     if (
-      validate(newData.delivery_to_rent.client_id[0]) &&
-      validate(newData.delivery_to_rent.object_id[0]) &&
+      validate(uuidClient) &&
+      validate(uuidObject) &&
       newData.delivery_to_rent.details && isValidDate(fecha)
     ) {
       var newElement = {
-        delivery_to_rent: {
-          client_id: uuidClient,
-          object_id: uuidObject,
-          details: {
-            status: newData.delivery_to_rent.details[0].status[0],
-            until: fecha,
-          },
-        }
+        client_id: uuidClient,
+        object_id: uuidObject,
+        details: {
+          status: newData.delivery_to_rent.details[0].status[0],
+          until: fecha,
+        },
       };
-      console.log(newElement);
-      datos[2].push(newElement);
-      response.json(datos[2]);
+
+      items[2][0].delivery_to_rent.push(newElement);
+      response.json(items[2][0].delivery_to_rent);
 
     } else {
       response.status(500).json({
         error: "There was an error.",
       });
     }
-    //console.log(newData.delivery_to_rent.client_id)
   }
-  else if(newData.delivery_to_return) {
+  else if (newData.delivery_to_return) {
     var uuidClient = newData.delivery_to_return.client_id[0]
     var uuidObject = newData.delivery_to_return.object_id[0]
     var fecha = newData.delivery_to_return.details[0].until[0];
     if (
-      validate(newData.delivery_to_return.client_id[0]) &&
-      validate(newData.delivery_to_return.object_id[0]) &&
+      validate(uuidClient) &&
+      validate(uuidObject) &&
       newData.delivery_to_return.details && isValidDate(fecha)
     ) {
       var newElement = {
-        delivery_to_return: {
-          client_id: uuidClient,
-          object_id: uuidObject,
-          details: {
-            status: newData.delivery_to_return.details[0].status[0],
-            until: fecha,
-          },
-        }
+        client_id: uuidClient,
+        object_id: uuidObject,
+        details: {
+          status: newData.delivery_to_return.details[0].status[0],
+          until: fecha,
+        },
       };
-      console.log(newElement);
-      datos[3].push(newElement);
-      response.json(datos[3]);
+
+      items[3][0].delivery_to_return.push(newElement);
+      response.json(items[3][0].delivery_to_return);
 
     } else {
       response.status(500).json({
         error: "There was an error.",
       });
     }
-    //console.log(newData.delivery_to_return.client_id)
   }
-  else{
-    response.send("Error type data");
+  else{ 
+    response.send("Error type data. Entries must have a correct format in xml");
   }
   
 });
@@ -238,17 +246,17 @@ function isValidDate(dateString) {
     }
     return true;
 }
-function checkList(list){
-    if (list.length == 0) {
-      return "Don't have items"
-    }
-    return list
-}
-function searchItemByObjet_id(list, object_id){
-  list.forEach(element => {
-   var uuid1 = element.object_id.toString()
-   console.log(object_id)
 
-  //console.log(element.object_id)
-  });
+function searchItemByObjet_id(list, object_id){
+  var itemInListFound=null
+  if(list.length!=0){
+    list.forEach(element => {
+      var uuid1 = element.object_id.toString()
+      if (object_id == uuid1) {
+        itemInListFound = element;
+      }
+    });
+  }
+
+  return itemInListFound;
 }

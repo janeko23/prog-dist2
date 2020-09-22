@@ -10,9 +10,10 @@ Este proyecto esta realizado con  node js
 
 # Como correr el programa
 - npm start
-
+# Los test corren con el comando
+- npm test
 # Como realizar pruebas de uso
 Para saber que nodejs esta correctamente instalado
 - node -v
-- con ejecutar el comando "npm i" deberia installar todas las dependencias que figurna en el "package.json" 
+- con ejecutar el comando "npm i" deberia installar todas las dependencias que figuran en el "package.json" 
 - luego desde postman puede ejecutar las siguientes pruebas
